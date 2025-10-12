@@ -23,3 +23,5 @@ function App() {
 }
 
 export default App;
+
+//TODO study route structure at Layout.tsx

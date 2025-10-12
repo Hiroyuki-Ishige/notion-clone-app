@@ -25,11 +25,11 @@ const SideBar: FC<Props> = ({ onSearchButtonClicked }) => {
               }}
               signout={() => {}}
             />
-            <Item label="検索" icon={Search} onClick={onSearchButtonClicked} />
+            <Item label="Search" icon={Search} onClick={onSearchButtonClicked} />
           </div>
           <div className="mt-4">
             <NoteList />
-            <Item label="ノートを作成" icon={Plus} />
+            <Item label="Create Note" icon={Plus} />
           </div>
         </div>
       </aside>

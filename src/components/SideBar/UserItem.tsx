@@ -25,7 +25,7 @@ const UserItem: FC<Props> = ({ user, signout }) => {
         >
           <div className="gap-x-2 flex items-center max-w-[150px]">
             <span className="text-start font-medium line-clamp-1">
-              {user.user_metadata.name} さんのノート
+              Note of {user.user_metadata.name}
             </span>
           </div>
           <ChevronsLeftRight className="rotate-90 ml-2 text-muted-foreground w-4 h-4" />
@@ -52,7 +52,7 @@ const UserItem: FC<Props> = ({ user, signout }) => {
           className="w-full cursor-pointer text-muted-foreground"
           asChild
         >
-          <Item label="ログアウト" icon={LogOut} onClick={signout} />
+          <Item label="Log out" icon={LogOut} onClick={signout} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,8 +1,11 @@
 export interface Note {
   id: number;
-  title: string;
-  content?: string;
-  displayTitle: string;
+  title: string | null;
+  content?: string | null;
+  
   created_at: string;
-  updated_at: string;
+
+  parent_document?: number | null;
+  // updated_at: string;
+  // displayTitle: string;
 }

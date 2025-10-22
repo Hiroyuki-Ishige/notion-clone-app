@@ -8,7 +8,7 @@ import { authRepository } from "./modules/auth/auth.repository";
 import { useEffect, useState } from "react";
 import { useCurrentUserStore } from "./modules/auth/current-user.state";
 
-//This App component will run when the application starts.
+// Main application component
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const currentUserStore = useCurrentUserStore();
@@ -17,11 +17,12 @@ function App() {
     setSession();
   }, []);
 
-  const setSession = async() => {
+  // Check if there's an existing user session on app load
+  const setSession = async () => {
     const currentUser = await authRepository.getCurrentUser();
     currentUserStore.set(currentUser ?? null);
     setIsLoading(false);
-  }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -32,11 +33,11 @@ function App() {
       <div className="h-full">
         <Routes>
           {/* Layout can be seen only longin user. */}
-          <Route path="/" element={<Layout />}> 
+          <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/notes/:id" element={<NoteDetail />} />
           </Route>
-          
+
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
@@ -47,4 +48,4 @@ function App() {
 
 export default App;
 
-//TODO create database in supabase to store notes
+//TODO Create child notes.

@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils';
 import { NoteItem } from './NoteItem';
+import { useNoteStore } from '@/modules/notes/note.state';
+
 
 interface NoteListProps {
   layer?: number;
@@ -7,7 +9,8 @@ interface NoteListProps {
 }
 
 export function NoteList({ layer = 0, parentId }: NoteListProps) {
-  const notes = [{}];
+  const noteStore = useNoteStore();
+  const notes = noteStore.getAll();
   return (
     <>
       <p
@@ -19,10 +22,10 @@ export function NoteList({ layer = 0, parentId }: NoteListProps) {
       >
         ページがありません
       </p>
-      {notes.map((note) => {
+      {notes && notes.map((note) => {
         return (
           <div key={note.id}>
-            <NoteItem layer={layer} />
+            <NoteItem note={note} layer={layer} />
           </div>
         );
       })}

@@ -48,4 +48,4 @@ function App() {
 
 export default App;
 
-//TODO Create child notes.
+//TODO Section 7: show detail of note.

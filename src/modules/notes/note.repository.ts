@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 
 
 export const noteRepository = {
+  // Create a new note
   async create(userId: string, params: { title?: string; parentId?: number }) {
     const { data, error } = await supabase
       .from("notes")
@@ -17,7 +18,8 @@ export const noteRepository = {
     if (error !== null || data === null) throw new Error(error?.message);
     return data;
   },
-
+  
+  // Fetch notes by userId and optional parentdocumentId
   async find(userId: string, parentdocumentId?: number) {
     const query = supabase
       .from("notes")
@@ -29,6 +31,31 @@ export const noteRepository = {
       parentdocumentId != null
         ? await query.eq("parent_document", parentdocumentId)
         : await query.is("parent_document", null);
+
+    if (error !== null) throw new Error(error?.message);
+    return data;
+  },
+  
+  // Fetch a single note by its ID
+  async findOne(userId: string, id: number) {
+    const { data, error } = await supabase
+      .from("notes")
+      .select()
+      .eq("user_id", userId)
+      .eq("id", id)
+      .single();
+
+    if (error !== null) throw new Error(error?.message);
+    return data;
+  },
+  //update note title and content
+  async update(id: number, note: { title?: string; content?: string }) {
+    const { data, error } = await supabase
+      .from("notes")
+      .update(note)
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error !== null) throw new Error(error?.message);
     return data;

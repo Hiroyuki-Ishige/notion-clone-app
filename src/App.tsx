@@ -48,4 +48,4 @@ function App() {
 
 export default App;
 
-//TODO Section 7: show detail of note.
+//TODO studay edit contents

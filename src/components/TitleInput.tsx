@@ -9,7 +9,7 @@ interface TitleInputProps {
 }
 
 export function TitleInput({ initialData, onTitleChange }: TitleInputProps) {
-  const [value, setValue] = useState(initialData?.title || "Untitled-Test");
+  const [value, setValue] = useState(initialData?.title || "Untitled");
 
   const handleInputChange = (newValue: string) => {
     setValue(newValue);

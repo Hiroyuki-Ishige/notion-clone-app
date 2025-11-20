@@ -5,11 +5,13 @@ import { useNoteStore } from "@/modules/notes/note.state";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
   const [title, setTitle] = useState<string>("");
   const { currentUser } = useCurrentUserStore();
   const noteStore = useNoteStore();
+  const navigate = useNavigate();
 
   const handleCreatTitle = async () => {
     try {
@@ -20,7 +22,7 @@ export function Home() {
       const newNote = await noteRepository.create(currentUser.id, { title });
       console.log("Note created:", newNote);
       noteStore.set([newNote]); // Add the new note to the global state
-
+      navigate(`/notes/${newNote.id}`);
       setTitle(""); // Clear the input field after creation
     } catch (error) {
       console.error("Error creating note:", error);

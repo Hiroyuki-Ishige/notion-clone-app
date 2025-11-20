@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
-import { LucideIcon } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { is } from "@blocknote/core/locales";
+import { LucideIcon } from "lucide-react";
 
 interface ItemProps {
   label: string;
@@ -8,6 +9,7 @@ interface ItemProps {
   onIconClick?: (event: React.MouseEvent) => void;
   isActive?: boolean;
   trailingItem?: React.ReactElement;
+  isSelected?: boolean;
 }
 
 export function Item({
@@ -16,17 +18,19 @@ export function Item({
   onIconClick,
   icon: Icon,
   isActive = false,
+  isSelected = false,
   trailingItem,
 }: ItemProps) {
   return (
     <div
       className={cn(
-        'group min-h-[27px] text-sm py-1 pr-3 w-full flex items-center text-muted-foreground font-medium hover:text-base transition-all duration-150',
-        isActive && 'bg-neutral-200'
+        "group min-h-[27px] text-sm py-1 pr-3 w-full flex items-center text-muted-foreground font-medium hover:text-base transition-all duration-150",
+        isActive && "bg-neutral-200",
+        isSelected && "bg-slate-300"
       )}
       onClick={onClick}
       role="button"
-      style={{ paddingLeft: '12px' }}
+      style={{ paddingLeft: "12px" }}
     >
       <Icon
         onClick={onIconClick}

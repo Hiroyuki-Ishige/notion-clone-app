@@ -48,4 +48,4 @@ function App() {
 
 export default App;
 
-//TODO studay edit contents
+//TODO set navigation to detail after creating new note in NoteList.tsx

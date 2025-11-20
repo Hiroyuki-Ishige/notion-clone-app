@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { sign } from "crypto";
 
 
 export const noteRepository = {
@@ -35,6 +36,19 @@ export const noteRepository = {
     if (error !== null) throw new Error(error?.message);
     return data;
   },
+
+  // Fetch notes by keyword in title
+  async findByKeyword(userId: string, keyword: string) {
+    const { data, error } = await supabase
+      .from("notes")
+      .select()
+      .eq("user_id", userId)
+      .or(`title.ilike.%${keyword}%, content.ilike.%${keyword}%`)
+      .order("created_at", { ascending: false });
+
+    if (error !== null) throw new Error(error?.message);
+    return data;
+  },
   
   // Fetch a single note by its ID
   async findOne(userId: string, id: number) {
@@ -48,6 +62,7 @@ export const noteRepository = {
     if (error !== null) throw new Error(error?.message);
     return data;
   },
+  
   //update note title and content
   async update(id: number, note: { title?: string; content?: string }) {
     const { data, error } = await supabase
@@ -60,4 +75,14 @@ export const noteRepository = {
     if (error !== null) throw new Error(error?.message);
     return data;
   },
+
+  //delete note by id
+  async delete(id: number) {
+    const { data, error } = await supabase.rpc('delete_children_notes_recursively', { note_id: id });
+
+    if (error !== null) throw new Error(error?.message);
+    return true;
+  },
+
+  
 };

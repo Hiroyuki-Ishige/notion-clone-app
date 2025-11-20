@@ -1,4 +1,4 @@
-import { FC} from "react";
+import { FC } from "react";
 import { Item } from "./Item";
 import { NoteList } from "../NoteList";
 import UserItem from "./UserItem";
@@ -6,28 +6,44 @@ import { Plus, Search } from "lucide-react";
 import { useNoteStore } from "@/modules/notes/note.state";
 import { useCurrentUserStore } from "@/modules/auth/current-user.state";
 import { noteRepository } from "@/modules/notes/note.repository";
+import { useNavigate } from "react-router-dom";
+import { authRepository } from "@/modules/auth/auth.repository";
 
 type Props = {
   onSearchButtonClicked: () => void;
 };
 
 const SideBar: FC<Props> = ({ onSearchButtonClicked }) => {
-  const { currentUser } = useCurrentUserStore();
+  const currentUserStore  = useCurrentUserStore();
   const noteStore = useNoteStore();
+  const navigate = useNavigate();
+  
 
   const handleCreatTitle = async () => {
     try {
-      if (!currentUser) {
+      if (!currentUserStore.currentUser) {
         console.error("No authenticated user found.");
         return;
       }
-      const newNote = await noteRepository.create(currentUser.id, {});
+      const newNote = await noteRepository.create(currentUserStore.currentUser.id, {});
       console.log("Note created:", newNote);
       noteStore.set([newNote]); // Add the new note to the global state
+      navigate(`/notes/${newNote.id}`);
     } catch (error) {
       console.error("Error creating note:", error);
     }
   };
+
+  const handleSignOut = async () => {
+    try {
+      await authRepository.signOut();
+      currentUserStore.set(null);
+      noteStore.clear();
+      navigate('/login');
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }
 
   return (
     <>
@@ -36,14 +52,14 @@ const SideBar: FC<Props> = ({ onSearchButtonClicked }) => {
           <div>
             <UserItem
               user={{
-                id: "test",
+                id: currentUserStore.currentUser ? currentUserStore.currentUser.id : "",
                 aud: "test",
-                email: "test@gmail.com",
-                user_metadata: { name: "testさん" },
+                email: currentUserStore.currentUser ? currentUserStore.currentUser.email! : "",
+                user_metadata: { name: currentUserStore.currentUser ? currentUserStore.currentUser.user_metadata.name : "" },
                 app_metadata: {},
-                created_at: "test",
+                created_at: currentUserStore.currentUser ? currentUserStore.currentUser.created_at : "",
               }}
-              signout={() => {}}
+              signout={handleSignOut}
             />
             <Item
               label="Search"
@@ -53,9 +69,7 @@ const SideBar: FC<Props> = ({ onSearchButtonClicked }) => {
           </div>
           <div className="mt-4">
             <NoteList />
-            <Item 
-            onClick={handleCreatTitle}
-            label="Create Note" icon={Plus} />
+            <Item onClick={handleCreatTitle} label="Create Note" icon={Plus} />
           </div>
         </div>
       </aside>

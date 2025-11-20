@@ -8,6 +8,10 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Note } from "@/types/note";
+//import { on } from "events";
+import { useDebouncedCallback } from "use-debounce";
+//import { NoteList } from "./NoteList";
+//import { useNavigate } from "react-router-dom";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -24,23 +28,25 @@ export function SearchModal({
   onKeywordChanged,
   onClose,
 }: SearchModalProps) {
+  const debounced = useDebouncedCallback(onKeywordChanged, 250);
+
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
       <Command shouldFilter={false}>
         <CommandInput
-          placeholder={"キーワードで検索"}
-          onValueChange={onKeywordChanged}
+          placeholder={"Search notes..."}
+          onValueChange={debounced}
         />
         <CommandList>
-          <CommandEmpty>条件に一致するノートがありません</CommandEmpty>
+          <CommandEmpty>No notes match your search</CommandEmpty>
           <CommandGroup>
             {notes?.map((note) => (
               <CommandItem
                 key={note.id}
-                title={note.displayTitle}
+                title={note.title || "No Title"}
                 onSelect={() => onItemSelect(note.id)}
               >
-                <span>{note.displayTitle}</span>
+                <span>{note.title || "No Title"}</span>
               </CommandItem>
             ))}
           </CommandGroup>

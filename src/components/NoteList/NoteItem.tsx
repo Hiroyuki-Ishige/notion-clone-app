@@ -3,15 +3,22 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
-import { ChevronDown, ChevronRight, FileIcon, MoreHorizontal, Plus, Trash } from 'lucide-react';
-import { Item } from '../SideBar/Item';
-import { cn } from '@/lib/utils';
-import { Note } from '@/types/note';
-import { useState } from 'react';
+} from "@/components/ui/dropdown-menu";
+import {
+  ChevronDown,
+  ChevronRight,
+  FileIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
+import { Item } from "../SideBar/Item";
+import { cn } from "@/lib/utils";
+import { Note } from "@/types/note";
+import { useEffect, useState } from "react";
 
 interface Props {
-  note: Note
+  note: Note;
   expanded?: boolean;
   layer?: number;
   isSelected?: boolean;
@@ -32,16 +39,34 @@ export function NoteItem({
   onExpand,
 }: Props) {
   const [isHovered, setIsHovered] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  
 
+  useEffect(() => {
+    if (isHovered) {
+      setShowMenu(true);
+    } else {
+      const timeout = setTimeout(() => {
+        setShowMenu(false);
+      }, 2000); // Adjust the delay as needed
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isHovered]);
 
   const getIcon = () => {
     return expanded ? ChevronDown : isHovered ? ChevronRight : FileIcon;
   };
-  
+
   const menu = (
-    <div className={cn('ml-auto flex items-center gap-x-2')}>
+    <div className={cn("ml-auto flex items-center gap-x-2")}>
       <DropdownMenu>
-        <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuTrigger
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log("... is clicked");
+          }}
+        >
           <div
             className="h-full ml-auto rounded-sm hover:bg-neutral-300"
             role="button"
@@ -50,7 +75,7 @@ export function NoteItem({
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-60"
+          className="w-60 bg-white border border-gray-300 shadow-lg"
           align="start"
           side="right"
           forceMount
@@ -77,14 +102,16 @@ export function NoteItem({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
       role="button"
-      style={{ paddingLeft: layer != null ? `${layer * 12 + 12}px` : '12px' }}
+      style={{ paddingLeft: layer != null ? `${layer * 12 + 12}px` : "12px" }}
     >
       <Item
-        label={note.title || 'Untitled'}
+        label={note.title || "Untitled"}
         icon={getIcon()}
         onIconClick={onExpand}
-        trailingItem={isHovered ? menu : undefined}
+        //trailingItem={menu}  // Always show menu for testing
+        trailingItem={showMenu ? menu : undefined} // Comment out the conditional
         isActive={isHovered ? true : false}
+        isSelected={isSelected}
       />
     </div>
   );

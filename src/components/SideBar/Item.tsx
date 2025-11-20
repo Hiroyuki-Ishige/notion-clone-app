@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { is } from "@blocknote/core/locales";
 import { LucideIcon } from "lucide-react";
 
 interface ItemProps {

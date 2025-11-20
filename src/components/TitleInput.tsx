@@ -1,5 +1,4 @@
 import { Note } from "@/types/note";
-import { on } from "events";
 import { useState } from "react";
 import TextAreaAutoSize from "react-textarea-autosize";
 

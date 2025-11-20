@@ -1,6 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { sign } from "crypto";
-
 
 export const noteRepository = {
   // Create a new note
@@ -78,7 +76,7 @@ export const noteRepository = {
 
   //delete note by id
   async delete(id: number) {
-    const { data, error } = await supabase.rpc('delete_children_notes_recursively', { note_id: id });
+    const { error } = await supabase.rpc('delete_children_notes_recursively', { note_id: id });
 
     if (error !== null) throw new Error(error?.message);
     return true;
